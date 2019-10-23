@@ -1,80 +1,96 @@
-console.log('test');
 /**
- * 
+ *
  * Manipulating the DOM exercise.
  * Exercise programmatically builds navigation,
  * scrolls to anchors from navigation,
  * and highlights section in viewport upon scrolling.
- * 
+ *
  * Dependencies: None
- * 
+ *
  * JS Version: ES2015/ES6
- * 
+ *
  * JS Standard: ESlint
- * 
-*/
+ *
+ */
 
-/**
- * Define Global Variables
- * 
-*/
-const navList = document.querySelector('#navbar__list');
-const pageSections = document.querySelectorAll('section');
+/******************
+Global Variables
+******************/
 
-/**
- * End Global Variables
- * Start Helper Functions
- * 
-*/
+const navList = document.querySelector("#navbar__list");
+const pageSections = document.querySelectorAll("section");
 
+/******************
+Helper Functions
+******************/
 
+const resetSections = () => {
+  for (i = 0; i < pageSections.length; i++) {
+    pageSections[i].classList.remove("active-section");
+  }
+};
 
-/**
- * End Helper Functions
- * Begin Main Functions
- * 
-*/
-const scroll = (e) => {
+const resetNav = () => {
+  const navLinks = navList.querySelectorAll("a");
+  for (let i = 0; i < navLinks.length; i++) {
+    navLinks[i].classList.remove("active");
+  }
+};
+
+const checkActive = () => {
+  for (let i = 0; i < pageSections.length; i++) {
+    const sectionDimensions = pageSections[i].getBoundingClientRect();
+    if (sectionDimensions.top >= -50 && sectionDimensions.top <= 50) {
+      console.log(sectionDimensions.top)
+      console.log(pageSections[i]);
+      return pageSections[i];
+    }
+  }
+};
+
+/******************
+Event Functions
+******************/
+
+const scroll = e => {
   e.preventDefault();
-  
-  const section = document.querySelector(e.target.getAttribute('href'));
-  console.log(section);
+  const section = document.querySelector(e.target.getAttribute("href"));
   window.scrollTo({
     top: section.offsetTop,
-    behavior: 'smooth'
+    behavior: "smooth"
   });
-}
-// build the nav
-for(let i = 0; i < pageSections.length; i++) {
-  const navItem = document.createElement('li');
-  const navLink = document.createElement('a');
-  navLink.textContent = pageSections[i].dataset.nav;
-  navLink.classList.add('menu__link');
-  navLink.setAttribute('href', `#${pageSections[i].getAttribute('id')}`);
-  navItem.appendChild(navLink);
-  navItem.addEventListener('click', scroll);
-  navList.appendChild(navItem);
-}
+};
 
+const updateActive = () => {
+  const active = checkActive();
+  if (active) {
+    resetSections();
+    resetNav();
+    const sectionID = active.getAttribute("id");
+    const sectionLink = navList.querySelector(`a[href='#${sectionID}']`);
+    sectionLink.classList.add("active");
+    active.classList.add("active-section");
+  }
+};
 
-// Add class 'active' to section when near top of viewport
+/******************
+Dynamic Navigation
+******************/
 
+const createNav = () => {
+  const navFragment = document.createDocumentFragment();
+  for (let i = 0; i < pageSections.length; i++) {
+    const navItem = document.createElement("li");
+    const navLink = document.createElement("a");
+    navLink.textContent = pageSections[i].dataset.nav;
+    navLink.classList.add("menu__link");
+    navLink.setAttribute("href", `#${pageSections[i].getAttribute("id")}`);
+    navItem.appendChild(navLink);
+    navItem.addEventListener("click", scroll);
+    navFragment.appendChild(navItem);
+  }
+  navList.appendChild(navFragment);
+};
 
-// Scroll to anchor ID using scrollTO event
-
-
-/**
- * End Main Functions
- * Begin Events
- * 
-*/
-
-// Build menu 
-
-// Scroll to section on link click
-// const scroll = (e) => {
-//   window.scrollTo(e.target)
-// }
-// Set sections as active
-
-
+createNav();
+window.addEventListener("scroll", updateActive);
