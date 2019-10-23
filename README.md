@@ -1,13 +1,17 @@
 # Landing Page Project
 
-## Table of Contents
+An example landing page which demonstrates understanding of DOM manipulation and
+events.
 
-* [Instructions](#instructions)
+Dynamically generates a navigation menu, implements a smooth scrolling effect, 
+and changes styling in the navigation and sections in response to scroll position.
 
-## Instructions
+## Built With
 
-The starter project has some HTML and CSS styling to display a static version of the Landing Page project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+* HTML
+* CSS
+* Javascript
 
-To get started, open `js/app.js` and start building out the app's functionality
+## Acknowledgments
 
-For specific, detailed instructions, look at the project instructions in the Udacity Classroom.
+* Completed as a project for the [Udacity](https://Udacity.com) Front-End NanoDegree.
