@@ -19,6 +19,7 @@ Global Variables
 
 const navList = document.querySelector("#navbar__list");
 const pageSections = document.querySelectorAll("section");
+const scrollTopButton = document.getElementById("scroll-to-top");
 
 /******************
 Helper Functions
@@ -41,10 +42,18 @@ const checkActive = () => {
   for (let i = 0; i < pageSections.length; i++) {
     const sectionDimensions = pageSections[i].getBoundingClientRect();
     if (sectionDimensions.top >= -50 && sectionDimensions.top <= 50) {
-      console.log(sectionDimensions.top)
-      console.log(pageSections[i]);
       return pageSections[i];
     }
+  }
+};
+
+const updateScrollTop = () => {
+  if (window.scrollY > window.innerHeight) {
+    scrollTopButton.classList.remove("fade-out");
+    scrollTopButton.classList.add("fade-in");
+  } else {
+    scrollTopButton.classList.remove("fade-in");
+    scrollTopButton.classList.add("fade-out");
   }
 };
 
@@ -53,12 +62,21 @@ Event Functions
 ******************/
 
 const scroll = e => {
+  console.log(e.target.tagName);
   e.preventDefault();
-  const section = document.querySelector(e.target.getAttribute("href"));
-  window.scrollTo({
-    top: section.offsetTop,
-    behavior: "smooth"
-  });
+  if (e.target.tagName === "DIV") {
+    console.log("clicked");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  } else {
+    const section = document.querySelector(e.target.getAttribute("href"));
+    window.scrollTo({
+      top: section.offsetTop,
+      behavior: "smooth"
+    });
+  }
 };
 
 const updateActive = () => {
@@ -71,6 +89,7 @@ const updateActive = () => {
     sectionLink.classList.add("active");
     active.classList.add("active-section");
   }
+  updateScrollTop();
 };
 
 /******************
@@ -94,3 +113,4 @@ const createNav = () => {
 
 createNav();
 window.addEventListener("scroll", updateActive);
+scrollTopButton.addEventListener("click", scroll);
